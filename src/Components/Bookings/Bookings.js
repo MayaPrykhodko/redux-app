@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useState } from 'react';
 import Header from '../Blocks/Header';
 import Footer from '../Blocks/Footer';
@@ -10,16 +10,12 @@ export default function Bookings() {
     const currentBookings = JSON.parse(sessionStorage.getItem('bookings')) || [];
     const [bookings, setBookings] = useState(currentBookings);
 
-    useEffect(() => {
-        const sortedByDateBookings = bookings.slice().sort((bookingA, bookingB) => {
+
+    const sortedByDateBookings = bookings.slice().sort((bookingA, bookingB) => {
         const dateA = new Date(bookingA.date);
         const dateB = new Date(bookingB.date);
         return dateA - dateB;
-        });
-
-        setBookings(sortedByDateBookings);
-    }, [bookings])
-
+    });
 
 
     const handleCancelBooking = (index) => {
@@ -35,7 +31,7 @@ export default function Bookings() {
             <main className="bookings-page">
                 <h1 className="visually-hidden">Travel App</h1>
                 <ul className="bookings__list">
-                    {bookings.map((booking, index) => {
+                    {sortedByDateBookings.map((booking, index) => {
                         return (
                             <BookingItem
                                 title={booking.title}
