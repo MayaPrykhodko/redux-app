@@ -1,24 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import {Route, Routes, Navigate } from 'react-router-dom';
+import Main from './Components/Main/Main';
+import SignIn from './Components/SignIn/SinIn';
+import SignUp from './Components/SignUp/SignUp';
+import Bookings from './Components/Bookings/Bookings';
+import TripDetails from './Components/TripDetails/TripDetails';
+import paths from './enums/paths';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path={paths.MAIN} element={<Main />} />
+      <Route path={paths.SIGN_IN} element={<SignIn />} />
+      <Route path={paths.SIGN_UP} element={<SignUp />} />
+      <Route path={paths.BOOKINGS} element={<Bookings />} />
+      <Route path={`${paths.TRIP_DETAILS}/:id`} element={<TripDetails />} />
+      <Route path={paths.OTHERS} element={<Navigate to={paths.MAIN} />} /> 
+    </Routes>
   );
 }
 
