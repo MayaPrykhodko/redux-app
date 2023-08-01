@@ -44,13 +44,14 @@ const Header = (props) => {
                                         data-test-id="header-profile-nav-username"
                                         className="profile-nav__item profile-nav__username"
                                     >
-                                        John Doe
+                                        {props.fullName}
                                     </li>
                                     <li className="profile-nav__item">
                                         <a
                                             data-test-id="header-profile-nav-sign-out"
-                                            href={paths.SIGN_IN}
+                                            href="/"
                                             className="profile-nav__sign-out button"
+                                            onClick={props.onSignOut}
                                         >
                                             Sign Out
                                         </a>

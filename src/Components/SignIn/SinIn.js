@@ -5,10 +5,17 @@ import Footer from '../Blocks/Footer';
 import '../../styles/SignPages.scss';
 import paths from '../../enums/paths';
 import validateSignIn from '../helpers/validateSignIn';
+import { useSelector, useDispatch } from 'react-redux';
+import { userLogin } from '../../actions/userLogin';
+import Loader from '../Blocks/Loader';
+import { useNavigate } from 'react-router-dom';
 
 
 
 export default function SignIn() {
+  const loading = useSelector((state) => state.user)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const initialValues = {
     email: "",
@@ -24,15 +31,20 @@ export default function SignIn() {
     setFormValues({ ...formValues, [name]: value });
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setFormErrors(validateSignIn(formValues));
     setIsSubmit(true);
 
     const errors = validateSignIn(formValues);
     if (Object.keys(errors).length === 0) {
-      window.location.replace(paths.MAIN);
+      const loginResponse = await dispatch(userLogin({ email: formValues.email, password: formValues.password }));
+     
+      if (loginResponse.meta.requestStatus === 'fulfilled') {
+        navigate(paths.MAIN);
+      }
     }
+
   }
 
   return (
@@ -59,10 +71,10 @@ export default function SignIn() {
               onChange={handleChange}
               value={formValues.password}
             />
-          </label>
-          <button data-test-id="auth-submit" className="button" type="submit">
-            Sign In
-          </button>
+          </label>  {loading ? <Loader /> : (<>
+            <button data-test-id="auth-submit" className="button" type="submit">
+              Sign In
+            </button> </>)}
         </form>
         <span>
           Don't have an account?
@@ -76,6 +88,7 @@ export default function SignIn() {
         </span>
       </main>
       <Footer />
+
     </>
   );
 }

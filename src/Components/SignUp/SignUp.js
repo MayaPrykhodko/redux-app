@@ -5,8 +5,15 @@ import Footer from '../Blocks/Footer';
 import '../../styles/SignPages.scss';
 import paths from '../../enums/paths';
 import validateSignUp from '../helpers/validateSignUp';
+import { useSelector, useDispatch } from 'react-redux';
+import { userRegister } from '../../actions/userRegister';
+import Loader from '../Blocks/Loader';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
+  const loading  = useSelector((state) => state.user)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const initialValues = {
     'full-name': "",
@@ -23,14 +30,18 @@ export default function SignUp() {
     setFormValues({ ...formValues, [name]: value });
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setFormErrors(validateSignUp(formValues));
     setIsSubmit(true);
 
     const errors = validateSignUp(formValues);
     if (Object.keys(errors).length === 0) {
-      window.location.replace(paths.MAIN);
+      const regResponse = await dispatch(userRegister({fullName: formValues['full-name'], email: formValues.email, password: formValues.password}));
+      
+      if (regResponse.meta.requestStatus === 'fulfilled') {
+        navigate(paths.MAIN);
+      }
     }
   }
 
@@ -71,9 +82,11 @@ export default function SignUp() {
               value={formValues.password}
             />
           </label>
+          {loading ? <Loader /> : (
           <button data-test-id="auth-submit" className="button" type="submit">
             Sign Up
           </button>
+          )}
         </form>
         <span>
           Already have an account?

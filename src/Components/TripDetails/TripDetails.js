@@ -3,16 +3,25 @@ import { useState, useEffect } from 'react';
 import Header from '../Blocks/Header';
 import Footer from '../Blocks/Footer';
 import { useParams } from 'react-router-dom';
-import trips from '../../data/trips';
 import '../../styles/TripDetails.scss';
 import validateModal from '../helpers/validateModal';
 import Modal from '../Blocks/Modal';
+import { useSelector, useDispatch } from "react-redux";
+import { fetchTripById } from '../../actions/fetchTripById';
 
 
 export default function TripDetails() {
 
-    const { id } = useParams();
-    const trip = trips.find((trip) => trip.id === id);
+    const dispatch = useDispatch();
+    const id = useParams();
+    const { selectedTrip } = useSelector((state) => state.trips);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            dispatch(fetchTripById(id,token));
+        }
+    }, []);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -32,12 +41,12 @@ export default function TripDetails() {
     const [formValues, setFormValues] = useState(initialValues);
     const [formErrors, setFormErrors] = useState({});
     const [isSubmit, setIsSubmit] = useState(false);
-    const [totalValue, setTotalValue] = useState(trip.price);
+    const [totalValue, setTotalValue] = useState(selectedTrip.price);
 
     useEffect(() => {
         const guests = formValues.guests || 1;
-        setTotalValue(guests * trip.price);
-    }, [formValues.guests, trip.price]);
+        setTotalValue(guests * selectedTrip.price);
+    }, [formValues.guests, selectedTrip.price]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -52,14 +61,14 @@ export default function TripDetails() {
         const errors = validateModal(formValues);
         if (Object.keys(errors).length === 0) {
             const bookingData = {
-                title: trip.title,
+                title: selectedTrip.title,
                 guests: formValues.guests,
                 date: formValues.date,
                 totalPrice: totalValue,
-              };
-              const existingBookings = JSON.parse(sessionStorage.getItem('bookings')) || [];
-              const updatedBookings = [...existingBookings, bookingData];
-              sessionStorage.setItem('bookings', JSON.stringify(updatedBookings));
+            };
+            const existingBookings = JSON.parse(sessionStorage.getItem('bookings')) || [];
+            const updatedBookings = [...existingBookings, bookingData];
+            sessionStorage.setItem('bookings', JSON.stringify(updatedBookings));
 
             setFormValues(initialValues);
             setIsModalOpen(false);
@@ -74,24 +83,24 @@ export default function TripDetails() {
                 <div className="trip">
                     <img
                         data-test-id="trip-details-image"
-                        src={trip.image}
+                        src={selectedTrip.image}
                         className="trip__img"
                         alt="trip_photo"
                     />
                     <div className="trip__content">
                         <div className="trip-info">
                             <h3 data-test-id="trip-details-title" className="trip-info__title">
-                                {trip.title}
+                                {selectedTrip.title}
                             </h3>
                             <div className="trip-info__content">
                                 <span
                                     data-test-id="trip-details-duration"
                                     className="trip-info__duration"
                                 >
-                                    <strong>{trip.duration}</strong> days
+                                    <strong>{selectedTrip.duration}</strong> days
                                 </span>
                                 <span data-test-id="trip-details-level" className="trip-info__level">
-                                    {trip.level}
+                                    {selectedTrip.level}
                                 </span>
                             </div>
                         </div>
@@ -99,7 +108,7 @@ export default function TripDetails() {
                             data-test-id="trip-details-description"
                             className="trip__description"
                         >
-                            {trip.description}
+                            {selectedTrip.description}
                         </div>
                         <div className="trip-price">
                             <span>Price</span>
@@ -107,7 +116,7 @@ export default function TripDetails() {
                                 data-test-id="trip-details-price-value"
                                 className="trip-price__value"
                             >
-                                {trip.price} $
+                                {selectedTrip.price} $
                             </strong>
                         </div>
                         <button
@@ -122,7 +131,7 @@ export default function TripDetails() {
             </main>
             <Footer />
             <Modal
-                trip={trip}
+                trip={selectedTrip}
                 isModalOpen={isModalOpen}
                 handleCloseModal={handleCloseModal}
                 formValues={formValues}
@@ -130,8 +139,8 @@ export default function TripDetails() {
                 isSubmit={isSubmit}
                 totalValue={totalValue}
                 handleChange={handleChange}
-                handleSubmitBooking={handleSubmitBooking} 
-                />
+                handleSubmitBooking={handleSubmitBooking}
+            />
         </>
     );
 }

@@ -1,11 +1,33 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Header from '../Blocks/Header';
 import Footer from '../Blocks/Footer';
 import '../../styles/Main.scss';
 import TripList from "../Blocks/TripList";
+import paths from "../../enums/paths";
+import { fetchUser } from '../../actions/fetchUser';
+import { fetchTrips } from "../../actions/fetchTrips";
 
 export default function Main() {
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+   
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            dispatch(fetchUser(token));
+            dispatch(fetchTrips(token));
+        } else {
+            navigate(paths.SIGN_IN);
+        }
+    }, []);
+
+    const user = useSelector((state) => state.user);
+    const trips = useSelector((state) => state.trips);
 
     const [name, setName] = useState("");
     const [duration, setDuration] = useState("");
@@ -19,17 +41,21 @@ export default function Main() {
 
     const handleSelectDuration = (e) => {
         setDuration(e.target.value);
-        setIsSubmit(name !== "" || e.target.value !== "" || level !== ""); 
+        setIsSubmit(name !== "" || e.target.value !== "" || level !== "");
     }
 
     const handleSelectLevel = (e) => {
         setLevel(e.target.value);
-        setIsSubmit(name !== "" || duration !== "" || e.target.value !== ""); 
+        setIsSubmit(name !== "" || duration !== "" || e.target.value !== "");
     }
+
+    const handleSignOut = () => {
+        localStorage.removeItem('token');
+      };
 
     return (
         <>
-            <Header />
+            <Header fullName={user.user.fullName} onSignOut={handleSignOut}/>
             <main >
                 <h1 className="visually-hidden">Travel App</h1>
                 <section className="trips-filter">
@@ -69,8 +95,8 @@ export default function Main() {
                 <section className="trips">
                     <h2 className="visually-hidden">Trips List</h2>
                     <ul className="trip-list">
-                        {isSubmit ? (<TripList title={name} duration ={duration} level={level}/>) : (
-                           <TripList />
+                        {isSubmit ? (<TripList title={name} duration={duration} level={level} trips={trips.trips} />) : (
+                            <TripList trips={trips.trips}/>
                         )}
 
                     </ul>

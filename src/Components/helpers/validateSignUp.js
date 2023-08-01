@@ -1,14 +1,14 @@
 
   const validateSignUp = (values) => {
     const errors = {};
-    const regexName = /^[A-Za-z]+$/i;
+    const regexName = /^[A-Za-z\s]+$/i;
     const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
    
 
     if (!values['full-name']) {
         errors['full-name'] = "Full name is required!";
       } else if (!regexName.test(values['full-name'])) {
-        errors['full-name'] = "Full name includes only letters without spaces!";
+        errors['full-name'] = "Full name includes only letters!";
       }
 
     if (!values.email) {

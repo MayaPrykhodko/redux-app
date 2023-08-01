@@ -6,6 +6,7 @@ import Bookings from './Components/Bookings/Bookings';
 import TripDetails from './Components/TripDetails/TripDetails';
 import paths from './enums/paths';
 
+
 function App() {
   return (
     <Routes>
