@@ -7,6 +7,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState: {
     loading: false,
+    registerLoading: false,
     token: null,
     user: {},
     status: 'idle',
@@ -17,11 +18,13 @@ const userSlice = createSlice({
     builder
       .addCase(userLogin.pending, (state) => {
         state.loading = true;
+        state.registerLoading = true;
         state.status = 'loading';
         state.error = null;
       })
       .addCase(userLogin.fulfilled, (state, action) => {
         state.loading = false;
+        state.registerLoading = false;
         state.token = action.payload.token;
         state.user = action.payload.user;
         state.error = null;
@@ -29,6 +32,7 @@ const userSlice = createSlice({
       })
       .addCase(userLogin.rejected, (state, action) => {
         state.loading = false;
+        state.registerLoading = false;
         state.token = null;
         state.user = null;
         state.status = 'failed';
@@ -50,11 +54,13 @@ const userSlice = createSlice({
       })
       .addCase(userRegister.pending, (state) => {
         state.loading = true;
+        state.registerLoading = true;
         state.status = 'loading';
         state.error = null;
       })
       .addCase(userRegister.fulfilled, (state, action) => {
         state.loading = false;
+        state.registerLoading = false;
         state.token = action.payload.token;
         state.user = action.payload.user;
         state.status = 'succeeded';
@@ -62,6 +68,7 @@ const userSlice = createSlice({
       })
       .addCase(userRegister.rejected, (state, action) => {
         state.loading = false;
+        state.registerLoading = false;
         state.token = null;
         state.data = null;
         state.status = 'failed';

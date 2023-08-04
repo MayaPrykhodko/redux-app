@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import {useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Header from '../Blocks/Header';
@@ -10,21 +10,21 @@ import paths from "../../enums/paths";
 import { fetchUser } from '../../actions/fetchUser';
 import { fetchTrips } from "../../actions/fetchTrips";
 
+
 export default function Main() {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-   
+    const token = localStorage.getItem('token');
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
         if (token) {
             dispatch(fetchUser(token));
             dispatch(fetchTrips(token));
         } else {
             navigate(paths.SIGN_IN);
         }
-    }, []);
+    }, [dispatch, navigate, token]);
 
     const user = useSelector((state) => state.user);
     const trips = useSelector((state) => state.trips);
@@ -51,11 +51,11 @@ export default function Main() {
 
     const handleSignOut = () => {
         localStorage.removeItem('token');
-      };
+    };
 
     return (
         <>
-            <Header fullName={user.user.fullName} onSignOut={handleSignOut}/>
+            <Header fullName={user.user.fullName} onSignOut={handleSignOut} />
             <main >
                 <h1 className="visually-hidden">Travel App</h1>
                 <section className="trips-filter">
@@ -96,7 +96,7 @@ export default function Main() {
                     <h2 className="visually-hidden">Trips List</h2>
                     <ul className="trip-list">
                         {isSubmit ? (<TripList title={name} duration={duration} level={level} trips={trips.trips} />) : (
-                            <TripList trips={trips.trips}/>
+                            <TripList trips={trips.trips} />
                         )}
 
                     </ul>

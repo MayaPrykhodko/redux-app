@@ -1,4 +1,3 @@
-// tripsSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchTrips } from '../actions/fetchTrips';
 import { fetchTripById } from '../actions/fetchTripById';
@@ -9,7 +8,7 @@ const tripsSlice = createSlice({
         loading: false,
         error: null,
         trips: [],
-        selectedTrip: null,
+        selectedTrip:{}
     },
     reducers: {},
     extraReducers: (builder) => {

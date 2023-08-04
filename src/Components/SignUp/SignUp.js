@@ -11,7 +11,7 @@ import Loader from '../Blocks/Loader';
 import { useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
-  const loading  = useSelector((state) => state.user)
+  const loading  = useSelector((state) => state.user.registerLoading)
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

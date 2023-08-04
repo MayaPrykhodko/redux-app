@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function SignIn() {
-  const loading = useSelector((state) => state.user)
+  const loading = useSelector((state) => state.user.loading)
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

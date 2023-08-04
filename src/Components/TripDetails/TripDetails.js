@@ -8,21 +8,32 @@ import validateModal from '../helpers/validateModal';
 import Modal from '../Blocks/Modal';
 import { useSelector, useDispatch } from "react-redux";
 import { fetchTripById } from '../../actions/fetchTripById';
+import { fetchUser } from '../../actions/fetchUser';
+import { useNavigate } from "react-router-dom";
+import paths from "../../enums/paths";
+import { bookTrip } from '../../actions/bookTrip';
+import { toast } from 'react-toastify';
 
 
 export default function TripDetails() {
 
     const dispatch = useDispatch();
-    const id = useParams();
-    const { selectedTrip } = useSelector((state) => state.trips);
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const token = localStorage.getItem('token');
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
         if (token) {
-            dispatch(fetchTripById(id,token));
+            dispatch(fetchUser(token));
+            dispatch(fetchTripById({ id: id, token: token }));
+        } else {
+            navigate(paths.SIGN_IN);
         }
-    }, []);
+    }, [dispatch, navigate, id, token]);
 
+    const user = useSelector((state) => state.user);
+    const selectedTrip = useSelector((state) => state.trips.selectedTrip);
+    const loading  = useSelector((state) => state.bookings.loading);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleOpenModal = () => {
@@ -53,31 +64,44 @@ export default function TripDetails() {
         setFormValues({ ...formValues, [name]: value });
     }
 
-    const handleSubmitBooking = (e) => {
+    const handleSubmitBooking = async (e) => {
         e.preventDefault();
         setFormErrors(validateModal(formValues));
         setIsSubmit(true);
 
         const errors = validateModal(formValues);
         if (Object.keys(errors).length === 0) {
-            const bookingData = {
-                title: selectedTrip.title,
-                guests: formValues.guests,
-                date: formValues.date,
-                totalPrice: totalValue,
-            };
-            const existingBookings = JSON.parse(sessionStorage.getItem('bookings')) || [];
-            const updatedBookings = [...existingBookings, bookingData];
-            sessionStorage.setItem('bookings', JSON.stringify(updatedBookings));
-
+            const bookResponse = await dispatch(bookTrip({
+                token: token, 
+                tripId: selectedTrip.id, 
+                userId: user.user.id, 
+                guests:formValues.guests,
+                date: formValues.date, 
+            }));
             setFormValues(initialValues);
+            if (bookResponse.meta.requestStatus === 'fulfilled') {
+               toast.success('Booking is successful', {
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+              }
+           
             setIsModalOpen(false);
         }
     }
 
+    const handleSignOut = () => {
+        localStorage.removeItem('token');
+    };
+
     return (
         <>
-            <Header />
+            <Header fullName={user.user.fullName} onSignOut={handleSignOut} />
             <main className="trip-page">
                 <h1 className="visually-hidden">Travel App</h1>
                 <div className="trip">
@@ -140,6 +164,7 @@ export default function TripDetails() {
                 totalValue={totalValue}
                 handleChange={handleChange}
                 handleSubmitBooking={handleSubmitBooking}
+                loading={loading}
             />
         </>
     );

@@ -13,6 +13,7 @@ export default function TripList(props) {
     return array.filter((trip) => trip.level === level);
   };
 
+
   filteredTrips = props.title? filterTripByTitle(props.title, props.trips): props.trips;
   filteredTrips= props.duration? filterTripByDuration(props.duration, filteredTrips): filteredTrips;
   filteredTrips = props.level?  filterTripByLevel(props.level, filteredTrips): filteredTrips;

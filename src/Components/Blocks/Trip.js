@@ -1,6 +1,5 @@
 import React from 'react';
 import paths from '../../enums/paths';
-import { Link } from 'react-router-dom';
 
 const Trip = (props) => {
     return (
@@ -37,13 +36,12 @@ const Trip = (props) => {
                     </strong>
                 </div>
             </div>
-            <Link data-test-id="trip-card-link" to={{
-                pathname: `${paths.TRIP_DETAILS}/${props.id}`,
-                state: { trip: props }
-            }} className="button"
+            <a data-test-id="trip-card-link"
+                href={`${paths.TRIP_DETAILS}/${props.id}`}
+                className="button"
             >
                 Discover a trip
-            </Link>
+            </a>
         </li>
     );
 }
