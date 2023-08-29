@@ -43,3 +43,11 @@
   color: $color-red;
   font-size: calc($font-size-100/2);
 }
+
+@media (max-width: 480px) {
+
+  .sign-up-form,
+  .sign-in-form {
+    max-width: 280px;
+  }
+}
