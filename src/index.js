@@ -13,7 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>
-      <HashRouter basename="/react-redux-travel-app">
+      <HashRouter>
         <App />
       </HashRouter>
       <ToastContainer/>
