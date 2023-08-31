@@ -93,7 +93,7 @@ export default function SignUp() {
           Already have an account?
           <Link
             data-test-id="auth-sign-in-link"
-            href={paths.SIGN_IN}
+            to={paths.SIGN_IN}
             className="sign-up-form__link"
           >Sign In</Link
           >
