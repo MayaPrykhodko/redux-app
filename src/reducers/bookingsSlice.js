@@ -24,7 +24,7 @@ const bookingsSlice = createSlice({
             .addCase(bookTrip.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = null;
-                state.bookings = action.payload;
+                state.bookings = state.bookings.concat(action.payload);
             })
             .addCase(bookTrip.rejected, (state, action) => {
                 state.loading = false;
