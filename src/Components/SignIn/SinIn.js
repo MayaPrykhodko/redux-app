@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { userLogin } from '../../actions/userLogin';
 import Loader from '../Blocks/Loader';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 
@@ -78,13 +79,13 @@ export default function SignIn() {
         </form>
         <span>
           Don't have an account?
-          <a
+          <Link
             data-test-id="auth-sign-up-link"
-            href={paths.SIGN_UP}
+            to={paths.SIGN_UP}
             className="sign-in-form__link"
           >
             Sign Up
-          </a>
+          </Link>
         </span>
       </main>
       <Footer />

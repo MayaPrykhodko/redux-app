@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { userRegister } from '../../actions/userRegister';
 import Loader from '../Blocks/Loader';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function SignUp() {
   const loading  = useSelector((state) => state.user.registerLoading)
@@ -90,11 +91,11 @@ export default function SignUp() {
         </form>
         <span>
           Already have an account?
-          <a
+          <Link
             data-test-id="auth-sign-in-link"
             href={paths.SIGN_IN}
             className="sign-up-form__link"
-          >Sign In</a
+          >Sign In</Link
           >
         </span>
       </main>
