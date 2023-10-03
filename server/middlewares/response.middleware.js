@@ -1,6 +1,5 @@
 import { ValidationMiddlewareError } from "./validation.middleware.error.js";
 import { LoginError } from "./validation.middleware.error.js";
-import { TokenExpiredError } from "./validation.middleware.error.js";
 
 const responseMiddleware = (req, res, next) => {
   if (!res.err) {
@@ -14,10 +13,7 @@ const responseMiddleware = (req, res, next) => {
     res.status(400).json({ error: true, message: res.err.message });
   } else if (res.err instanceof LoginError) {
     res.status(401).json({ error: true, message: "Invalid username or password" });
-  } else if (res.err instanceof TokenExpiredError) {
-    res.status(401).json({ error: true, message: res.err.message});
-  }
-  else {
+  } else {
     res.status(500).json({ error: true, message: res.err.message });
   }
   next();

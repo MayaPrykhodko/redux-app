@@ -10,7 +10,7 @@ class AuthService {
       throw new LoginError();
     }
     let token = jwt.sign({user: user}, 'your-secret-key', {
-      expiresIn: '30s',
+      expiresIn: '24h',
     });
     return {user:user, token:token};
   }
