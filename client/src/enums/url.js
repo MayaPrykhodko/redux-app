@@ -1,9 +1,9 @@
 const url = {
-    AUTHENTICATED_USER: 'http://localhost:3050/api/v1/users/authenticated-user',
-    USER_LOGIN: 'http://localhost:3050/api/v1/auth/sign-in',
-    USER_REGISTER: 'http://localhost:3050/api/v1/users/sign-up',
-    TRIPS: 'http://localhost:3050/api/v1/trips/',
-    BOOKINGS: 'http://localhost:3050/api/v1/bookings/'
+    AUTHENTICATED_USER: 'https://redux-app-livid.vercel.app/api/v1/users/authenticated-user',
+    USER_LOGIN: 'https://redux-app-livid.vercel.app/api/v1/auth/sign-in',
+    USER_REGISTER: 'https://redux-app-livid.vercel.app/api/v1/users/sign-up',
+    TRIPS: 'https://redux-app-livid.vercel.app/api/v1/trips/',
+    BOOKINGS: 'https://redux-app-livid.vercel.app/api/v1/bookings/'
   };
 
   export default url;
